@@ -1,0 +1,165 @@
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="nav-container">
+    <!-- Logo / Brand -->
+    <a routerLink="/" class="logo" id="nav-logo" (click)="closeMobileMenu()">
+      <span class="logo-icon" style="display: flex; align-items: center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+          <circle cx="12" cy="14" r="6"></circle>
+          <path d="M10 8l2 -3l2 3"></path>
+          <path d="M9 10h6"></path>
+        </svg>
+      </span>
+      <span class="logo-text">
+        <span class="text-gradient">Eternally</span> Yours
+      </span>
+    </a>
+
+    <!-- Hamburger Menu -->
+    <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Authenticated Nav -->
+    <div class="nav-links" [class.mobile-open]="isMobileMenuOpen" *ngIf="currentUser$ | async as user; else loggedOut">
+      <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" id="nav-events" (click)="closeMobileMenu()">
+        Services
+      </a>
+      <a routerLink="/wedding-card/generate" class="nav-link" routerLinkActive="active" id="nav-wedding-card" (click)="closeMobileMenu()">
+        Cards
+      </a>
+      <a *ngIf="user.role === 'USER'" routerLink="/planning" class="nav-link" routerLinkActive="active" id="nav-planning" (click)="closeMobileMenu()">
+        Planning
+      </a>
+      <div class="nav-dropdown">
+        <span class="nav-link dropdown-toggle">Features ▾</span>
+        <div class="dropdown-content">
+          <a routerLink="/saved" class="dropdown-item" routerLinkActive="active" id="nav-saved" (click)="closeMobileMenu()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: middle;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            Saved
+          </a>
+          <a routerLink="/inspiration" class="dropdown-item" routerLinkActive="active" id="nav-inspiration" (click)="closeMobileMenu()">
+            Inspiration
+          </a>
+          <a routerLink="/ai-assistant" class="dropdown-item" routerLinkActive="active" id="nav-ai-assistant" (click)="closeMobileMenu()">
+            <i class="fas fa-robot" style="margin-right: 4px;"></i> AI Assistant
+          </a>
+        </div>
+      </div>
+      <a *ngIf="user.role === 'CLIENT' || user.role === 'ADMIN'" 
+         routerLink="/support" class="nav-link" routerLinkActive="active" id="nav-support" (click)="closeMobileMenu()">
+        Support
+      </a>
+      <a *ngIf="user.role === 'CLIENT' || user.role === 'ADMIN'" 
+         routerLink="/client-dashboard" class="nav-link" routerLinkActive="active" id="nav-planner" (click)="closeMobileMenu()">
+        Vendor Portal
+      </a>
+      <a *ngIf="user.role === 'ADMIN'" 
+         routerLink="/admin-dashboard" class="nav-link" routerLinkActive="active" id="nav-admin" (click)="closeMobileMenu()">
+        Admin
+      </a>
+      <a *ngIf="user.role === 'CLIENT' || user.role === 'ADMIN'" 
+         routerLink="/enquiry-analytics" class="nav-link" routerLinkActive="active" id="nav-enquiries" (click)="closeMobileMenu()">
+        Enquiries
+      </a>
+      
+      <div class="user-profile">
+        <label for="profile-upload" class="profile-pic-container" title="Update profile photo">
+          <img *ngIf="user.profile_picture; else defaultPic" 
+               [src]="getProfilePicUrl(user.profile_picture)" 
+               alt="Profile" class="profile-pic">
+          <ng-template #defaultPic>
+            <div class="profile-pic default-pic">{{ user.username.charAt(0).toUpperCase() }}</div>
+          </ng-template>
+          <div class="profile-pic-edit">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+        </label>
+        <input type="file" id="profile-upload" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+        
+        <div class="user-info">
+          <a routerLink="/profile" class="user-name" style="text-decoration: none;" title="View Profile">{{ user.username }}</a>
+        </div>
+
+        <div class="theme-menu-container" style="position: relative; display: flex; gap: 0.5rem; align-items: center;">
+          <!-- Notifications Bell -->
+          <div style="position: relative;" *ngIf="user.role === 'CLIENT' || user.role === 'ADMIN'">
+            <button (click)="toggleNotifications()" class="btn btn-secondary btn-sm" id="notif-btn" title="Notifications" style="position: relative; display: flex; align-items: center; justify-content: center; padding: 0.5rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span *ngIf="unreadCount > 0" style="position: absolute; top: -5px; right: -5px; background: var(--gold, #D4AF37); color: white; font-size: 0.7rem; padding: 2px 5px; border-radius: 10px; font-weight: bold; border: 2px solid var(--background);">
+                {{ unreadCount > 9 ? '9+' : unreadCount }}
+              </span>
+            </button>
+            
+            <div *ngIf="isNotificationsOpen" class="theme-dropdown glass animate-fade-in" style="position: absolute; top: 120%; right: 0; width: 320px; max-height: 400px; overflow-y: auto; padding: 0; border-radius: 12px; z-index: 1000; box-shadow: var(--shadow-md);">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--background); z-index: 1;">
+                <span style="font-weight: 600; font-size: 0.9rem;">Notifications</span>
+                <button (click)="isNotificationsOpen = false" style="background:none; border:none; cursor:pointer;">✕</button>
+              </div>
+              <div *ngIf="notifications.length === 0" style="padding: 2rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+                No new notifications
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <div *ngFor="let notif of notifications" 
+                     (click)="markAsRead(notif)"
+                     [style.background]="notif.is_read ? 'transparent' : 'var(--primary-light)'"
+                     style="padding: 1rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; gap: 0.25rem;">
+                  <span style="font-size: 0.85rem; color: var(--text-main);" [style.font-weight]="notif.is_read ? 'normal' : '600'">{{ notif.message }}</span>
+                  <span style="font-size: 0.7rem; color: var(--text-muted);">{{ notif.created_at | date:'short' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button (click)="toggleDarkModeDirect(user)" class="btn btn-secondary btn-sm" id="theme-btn" [title]="user.is_dark_mode ? 'Light Mode' : 'Dark Mode'" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem;">
+            <!-- Moon icon (when in light mode) -->
+            <svg *ngIf="!user.is_dark_mode" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <!-- Sun icon (when in dark mode) -->
+            <svg *ngIf="user.is_dark_mode" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+        </div>
+
+        <button (click)="logout()" class="btn btn-secondary btn-sm" id="nav-logout">Logout</button>
+      </div>
+    </div>
+    
+    <!-- Guest Nav -->
+    <ng-template #loggedOut>
+      <div class="nav-links" [class.mobile-open]="isMobileMenuOpen">
+        <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
+          Services
+        </a>
+        <a routerLink="/wedding-card/generate" class="nav-link" routerLinkActive="active" id="nav-wedding-card-guest" (click)="closeMobileMenu()">
+          Cards
+        </a>
+        <a routerLink="/saved" class="nav-link" routerLinkActive="active" id="nav-saved-guest" style="display: flex; align-items: center; gap: 0.25rem;" (click)="closeMobileMenu()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+          Saved
+        </a>
+        <div class="auth-buttons">
+          <button routerLink="/login" class="btn btn-secondary" id="nav-login" (click)="closeMobileMenu()">Sign In</button>
+          <button routerLink="/register" class="btn btn-primary" id="nav-register" (click)="closeMobileMenu()">Begin Your Journey</button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</nav>

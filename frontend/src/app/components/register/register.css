@@ -1,0 +1,172 @@
+/* ═══ AUTH LAYOUT ════════════════════════════════ */
+.auth-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Fill the space below the fixed navbar */
+  min-height: calc(100vh - 72px);
+  /* Escape the main container padding so it's truly edge-to-edge */
+  margin: -2rem -1rem -2rem -1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-bg {
+  position: absolute;
+  inset: -15%;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  filter: brightness(0.9) contrast(1.05);
+}
+
+.auth-video-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translateX(-50%) translateY(-50%);
+  object-fit: cover;
+  z-index: 1;
+  opacity: 0.85; /* Slight dimming so form stands out */
+}
+
+/* ── Form Side ───────────────────── */
+.auth-form-side {
+  flex: none;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: transparent;
+  position: relative; /* REQUIRED for z-index to work! */
+  z-index: 2;
+}
+
+.brand-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.auth-form-container {
+  width: 100%;
+  padding: 3rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.auth-welcome {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.welcome-ornament {
+  color: var(--accent);
+  letter-spacing: 0.5em;
+  font-size: 0.7rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.auth-welcome h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+}
+
+.auth-welcome p {
+  font-size: 0.92rem;
+}
+
+/* ── Input Wrapper with icon ──────── */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.input-with-icon {
+  padding-left: 2.75rem;
+}
+
+/* ── Submit Button ────────────────── */
+.auth-submit-btn {
+  padding: 1rem;
+  font-size: 0.92rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Social ───────────────────────── */
+.social-signin {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Auth Switch ──────────────────── */
+.auth-switch {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.auth-switch-link {
+  font-weight: 700;
+  margin-left: 0.3rem;
+}
+
+/* ── Image Side ─────────────────────── */
+.auth-image-side {
+  display: none !important;
+}
+
+/* ── Divider ──────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.25rem 0;
+  color: var(--text-light);
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+.divider span {
+  padding: 0 12px;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.text-muted { color: var(--text-muted); }
+.w-100 { width: 100%; }
